@@ -112,77 +112,19 @@ body.cap{background:#fff}.cap .wrap{padding:0}.cap .paper{box-shadow:none;border
 #thm input[type=color]{width:34px;height:26px;padding:0;border:1px solid var(--line);border-radius:6px;background:none;cursor:pointer}
 #thm button{padding:3px 10px;font-size:12px}
 .logo:has(img){border:0;background:#fff}
+@media print{
+ body.lh .logo,body.lh .hd .co,body.lh .ty,body.lh .brs,body.lh .cob{display:none!important}
+ body.lh .hd{background:none;border:0;color:var(--ink);padding:0 0 10px;justify-content:center}
+ body.lh .hd .qt{width:100%;text-align:center}
+ body.lh .hd .qt h2{color:var(--brand);font-size:26px;margin:0 0 6px}
+ body.lh .hd input,body.lh .hd label{color:var(--ink)}
+ body.lh .paper,body.lh .body,body.lh td,body.lh .wd{background:transparent!important}
+ body.lh .body{padding:0}
+ body.lh tr:nth-child(even) td{background:transparent!important}
+}
+@media print{tr,.tot,.wd,.ft,.br{break-inside:avoid}thead{display:table-header-group}h4.s{break-after:avoid}}
+#thm input[type=number]{width:58px;border:1px solid var(--line);border-radius:6px;padding:3px 4px;text-align:center}
 </style>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script>
-/* =====================================================================
-   إعدادات مشروع Firebase (quotes-69b54)
-   ===================================================================== */
-window.FIREBASE_CONFIG={
-  apiKey:"AIzaSyAJ_8aAUvW00Huf6M2H_Tr4vPqLU1_-d90",
-  authDomain:"quotes-69b54.firebaseapp.com",
-  projectId:"quotes-69b54",
-  storageBucket:"quotes-69b54.firebasestorage.app",
-  messagingSenderId:"591887771786",
-  appId:"1:591887771786:web:db1393abddde1c1f352573",
-  measurementId:"G-3V5Z45G3P5"
-};
-</script>
-<script>
-/* طبقة ربط: تجعل التطبيق يعمل على Firebase (قاعدة بيانات + تسجيل دخول) خارج Claude */
-(function(){
- const cfg=window.FIREBASE_CONFIG||{};
- const ok=!!window.firebase&&!/PASTE/.test(JSON.stringify(cfg));
- let done;const ready=new Promise(r=>done=r);
- const css='#lg{position:fixed;inset:0;z-index:100;background:#e9edf3;display:flex;align-items:center;justify-content:center;padding:16px;font-family:Cairo,Tahoma,sans-serif;direction:rtl}#lg form,#lg .bx{background:#fff;border-radius:16px;padding:22px;max-width:380px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.15);color:#1b2430;line-height:1.7}#lg h2{margin:0 0 4px;color:#0f3d6e}#lg p{color:#6b7686;margin:0 0 12px;font-size:13px}#lg input{width:100%;padding:10px;margin:6px 0;border:1px solid #e3e8ef;border-radius:8px;font:inherit;box-sizing:border-box}#lg button{width:100%;padding:10px;border:0;border-radius:8px;background:#0f3d6e;color:#fff;font:inherit;font-weight:700;margin-top:8px;cursor:pointer}#lg a{display:block;text-align:center;margin-top:10px;font-size:12px;color:#1d5fa3;cursor:pointer}#lgm{color:#c0392b;font-size:13px;min-height:18px}';
- let box=null,msg='';
- function show(m){
-  const put=()=>{
-   if(!box){const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);box=document.createElement('div');box.id='lg';document.body.appendChild(box)}
-   box.style.display='flex';
-   if(!ok){box.innerHTML='<div class="bx"><h2>الإعداد مطلوب</h2><p>لم يتم إدخال إعدادات Firebase بعد. افتح ملف index.html وعدّل الجزء الموضح في أوله (خطوات كاملة في README-ar.md).</p></div>';return}
-   box.innerHTML='<form id="lgf"><h2>تسجيل الدخول</h2><p>نظام عروض الأسعار والفواتير — للفريق فقط</p><input id="lge" type="email" placeholder="البريد الإلكتروني" autocomplete="username" required><input id="lgp" type="password" placeholder="كلمة المرور" autocomplete="current-password" required><div id="lgm"></div><button type="submit">دخول</button><a id="lgr">نسيت كلمة المرور؟</a></form>';
-   $lg('#lgm').textContent=m||'';
-   $lg('#lgf').onsubmit=ev=>{ev.preventDefault();$lg('#lgm').textContent='';
-    firebase.auth().signInWithEmailAndPassword($lg('#lge').value.trim(),$lg('#lgp').value).catch(e=>{
-     const c=e&&e.code||'';$lg('#lgm').textContent=/invalid|wrong|not-found/.test(c)?'البريد أو كلمة المرور غير صحيحة':/too-many/.test(c)?'محاولات كثيرة، حاول لاحقًا':(e.message||'تعذّر تسجيل الدخول')})};
-   $lg('#lgr').onclick=()=>{const em=$lg('#lge').value.trim();if(!em){$lg('#lgm').textContent='اكتب بريدك أولًا';return}
-    firebase.auth().sendPasswordResetEmail(em).then(()=>{$lg('#lgm').style.color='#1f9d55';$lg('#lgm').textContent='تم إرسال رابط إعادة التعيين لبريدك'}).catch(e=>{$lg('#lgm').textContent=e.message})};
-  };
-  document.body?put():document.addEventListener('DOMContentLoaded',put);
- }
- const $lg=q=>box.querySelector(q);
- const hide=()=>{if(box)box.style.display='none'};
- if(!ok){show();window.claude={use:async()=>new Promise(()=>{})};return}
- const enc=v=>Array.isArray(v)?v.map(x=>Array.isArray(x)?{_arr:enc(x)}:enc(x)):(v&&typeof v==='object'?Object.fromEntries(Object.entries(v).map(([k,x])=>[k,enc(x)])):v);
- const dec=v=>Array.isArray(v)?v.map(dec):(v&&typeof v==='object'?(Object.keys(v).length===1&&'_arr' in v?dec(v._arr):Object.fromEntries(Object.entries(v).map(([k,x])=>[k,dec(x)]))):v);
- firebase.initializeApp(cfg);
- const auth=firebase.auth(),fs=firebase.firestore();
- try{fs.enablePersistence({synchronizeTabs:true}).catch(()=>{})}catch(e){}
- const wd=d=>({id:d.id,exists:d.exists,metadata:d.metadata,data:()=>dec(d.data())});
- const wq=sn=>({docs:sn.docs.map(wd),size:sn.size,metadata:sn.metadata,docChanges:()=>sn.docChanges().map(c=>({type:c.type,doc:wd(c.doc)}))});
- const dref=r=>({get:async()=>wd(await r.get()),set:d=>r.set(enc(d)),delete:()=>r.delete(),onSnapshot:(n,e)=>r.onSnapshot(sn=>n(wd(sn)),e)});
- const db={collection:p=>{const c=fs.collection(p);return{doc:id=>dref(c.doc(id)),get:async()=>wq(await c.get()),onSnapshot:(n,e)=>c.onSnapshot(sn=>n(wq(sn)),e)}},doc:p=>dref(fs.doc(p))};
- const names={};
- const user={id:async()=>auth.currentUser.uid,profiles:async ids=>{const o={};
-  await Promise.all([].concat(ids).map(async id=>{let n=names[id];
-   if(n===undefined){try{const d=await fs.collection('users').doc(id).get();n=d.exists?(d.data().name||''):''}catch(e){n=''}names[id]=n}
-   o[id]={id,name:n,isMe:id===auth.currentUser.uid}}));return o}};
- auth.onAuthStateChanged(async u=>{
-  if(!u){show(msg);msg='';return}
-  try{
-   const r=fs.collection('users').doc(u.uid),d=await r.get();
-   if(!d.exists){const def=(u.email||'').split('@')[0];const n=(prompt('اكتب اسمك (يظهر على المستندات التي تنشئها):',u.displayName||def)||'').trim()||def;await r.set({name:n});names[u.uid]=n}
-   hide();
-   if(!document.getElementById('lgo')){const b=document.createElement('button');b.id='lgo';b.className='g';b.textContent='خروج';b.onclick=()=>auth.signOut().then(()=>location.reload());const bar=document.querySelector('.bar');if(bar)bar.appendChild(b)}
-   done(u);
-  }catch(e){msg='هذا الحساب غير مصرّح له بالدخول. تواصل مع المسؤول.';auth.signOut()}
- });
- window.claude={use:async n=>{if(n==='db'){await ready;return db}if(n==='user'){await ready;return user}return null}};
-})();
-</script>
 </head>
 <body>
 <div class="wrap">
@@ -196,13 +138,14 @@ window.FIREBASE_CONFIG={
   <button class="g" id="lst">عروضي وفواتيري</button>
   <button class="g" id="dbo">قاعدة البيانات</button>
   <button class="g" id="prt">طباعة / PDF</button>
+  <button class="g" id="prl">طباعة على ورق الشركة</button>
   <button id="wa" style="background:#1f9d55">إرسال واتساب</button>
   <span class="st" id="stat">الحفظ تلقائي</span>
   <span id="sy" style="color:var(--mut);font-size:12px"></span>
  </div>
  <div class="panel" id="panel"></div>
 
- <div class="who" id="thm">🎨 ألوان الهوية: <input type="color" id="c1" title="اللون الأساسي"><input type="color" id="c2" title="اللون المميز"> <button class="g" id="cr">من الشعار</button><button class="g" id="cd">الافتراضي</button></div>
+ <div class="who" id="thm">🎨 ألوان الهوية: <input type="color" id="c1" title="اللون الأساسي"><input type="color" id="c2" title="اللون المميز"> <button class="g" id="cr">من الشعار</button><button class="g" id="cd">الافتراضي</button> <span style="margin-inline-start:12px">📄 ورق الشركة — هامش (مم): أعلى</span><input type="number" id="lht" min="0" max="120"><span>أسفل</span><input type="number" id="lhb" min="0" max="120"></div>
  <div class="who" id="who"></div>
  <div class="paper">
   <div class="hd">
@@ -229,7 +172,7 @@ window.FIREBASE_CONFIG={
      <label class="dro" style="display:none">المرجع: <input data-k="ref" placeholder="رقم عرض / أمر شراء"></label>
      <label class="qo"><span id="lv">صالح حتى:</span> <input type="date" data-k="valid"></label>
      <label class="qo">العملة: <select data-k="cur"><option>ج.م</option><option>ر.س</option><option>د.إ</option><option>$</option><option>€</option></select></label></div>
-    <div><h4>بيانات الشركة</h4>
+    <div class="cob"><h4>بيانات الشركة</h4>
      <label>هاتف: <input data-k="co.phone" placeholder="+20 ..."></label>
      <label>بريد: <input data-k="co.email" placeholder="info@company.com"></label>
      <label>العنوان: <input data-k="co.addr" placeholder="المدينة، الدولة"></label></div>
@@ -405,7 +348,7 @@ $('#panel').addEventListener('click',e=>{
  if(r!=null&&confirm('حذف هذا العرض نهائيًا؟')){const q=l.splice(+r,1)[0];ls.set(L,l);qdel(q.id);if(q.id===S.id){ls.set(K,S)}list()}
 });
 /* ===== مزامنة الفريق (db مشترك) + نسخة محلية ===== */
-let ME=null,USR=null,TH=ls.get('qt:th',null),LOGO='',DB=false,dbh=null,dirtyCo=false,SET=ls.get('qt:set',null);
+let ME=null,USR=null,TH=ls.get('qt:th',null),LH=ls.get('qt:lh',null)||{t:42,b:34,s:12},LOGO='',DB=false,dbh=null,dirtyCo=false,SET=ls.get('qt:set',null);
 const cl=o=>JSON.parse(JSON.stringify(o));
 const UP=new Set(ls.get('qt:up',[]));
 const setSync=t=>{const e=$('#sy');if(e)e.textContent={ok:'☁ متزامن مع الفريق',busy:'☁ جارٍ المزامنة…',off:'محفوظ على هذا الجهاز فقط',err:'⚠ تعذّرت المزامنة — سنعيد المحاولة'}[t]||''};
@@ -421,7 +364,7 @@ const cpush=c=>put('clients',cid(c.name),{name:c.name,phone:c.phone||'',email:c.
 const ipush=it=>put('items',it.id,{id:it.id,name:it.name,unit:it.unit||'',price:+it.price||0,note:it.note||'',ts:Date.now()});
 const idel=id=>put('items',id,null);
 const cdel=n=>put('clients',cid(n),null);
-const mkSet=()=>{const d=cl({co:S.co,st:S.st,br:S.br,vat:S.vat,cur:S.cur});d.co.logo=LOGO||'';d.th=TH||null;d.ts=Date.now();return d};
+const mkSet=()=>{const d=cl({co:S.co,st:S.st,br:S.br,vat:S.vat,cur:S.cur});d.co.logo=LOGO||'';d.th=TH||null;d.lh=LH;d.ts=Date.now();return d};
 const spush=()=>{SET=mkSet();ls.set('qt:set',SET);put('settings','main',SET)};
 const fromSet=(q,t)=>{q.co=cl(t.co);q.st=cl(t.st);q.br=cl(t.br);q.vat=t.vat;q.cur=t.cur;if(!q.co.logo&&LOGO)q.co.logo=LOGO};
 const nm=(ps,id)=>ps[id]?(ps[id].isMe?'أنت':(ps[id].name||'زميل')):'زميل';
@@ -461,7 +404,7 @@ async function attach(){
   const[qs,cs,ss,is]=await Promise.all([db.collection('quotes').get(),db.collection('clients').get(),db.doc('settings/main').get(),db.collection('items').get()]);
   /* ترحيل مرة واحدة من النسخة الخاصة القديمة */
   let old=[],oldMeta=null;
-  if(0&&uid){try{const oc=db.collection('data/users/'+uid),mg=await oc.doc('migrated').get();
+  if(uid){try{const oc=db.collection('data/users/'+uid),mg=await oc.doc('migrated').get();
    if(!mg.exists){(await oc.get()).docs.forEach(d=>{if(d.id.startsWith('q_'))old.push(cl(d.data()));else if(d.id==='meta')oldMeta=cl(d.data())});await oc.doc('migrated').set({at:Date.now()})}}catch(e){}}
   /* العروض والفواتير */
   const rem={};qs.docs.forEach(d=>{rem[d.id]=cl(d.data());UP.add(d.id)});
@@ -482,7 +425,7 @@ async function attach(){
   /* بيانات الشركة المشتركة */
   if(oldMeta&&oldMeta.logo&&!LOGO)LOGO=oldMeta.logo;
   const rs=ss.exists?cl(ss.data()):null;
-  if(rs&&(!SET||(rs.ts||0)>=(SET.ts||0))){SET=rs;ls.set('qt:set',rs);if(rs.co.logo)LOGO=rs.co.logo;if(rs.th){TH=rs.th;ls.set('qt:th',TH);applyTheme(TH)}}
+  if(rs&&(!SET||(rs.ts||0)>=(SET.ts||0))){SET=rs;ls.set('qt:set',rs);if(rs.co.logo)LOGO=rs.co.logo;if(rs.th){TH=rs.th;ls.set('qt:th',TH);applyTheme(TH)}if(rs.lh){LH=rs.lh;ls.set('qt:lh',LH);applyLH()}}
   else if(SET||S.co.name||LOGO){if(!SET)SET=mkSet();ls.set('qt:set',SET);put('settings','main',SET)}
   if(!LOGO&&SET&&SET.co.logo)LOGO=SET.co.logo;
   if(SET&&!filled(S)&&!editing()){fromSet(S,SET);load(S);ls.set(K,S)}
@@ -515,7 +458,7 @@ async function attach(){
   },()=>{});
   db.doc('settings/main').onSnapshot(sn=>{
    if(sn.metadata.hasPendingWrites||!sn.exists)return;const r=cl(sn.data());
-   if((r.ts||0)>((SET&&SET.ts)||0)){SET=r;ls.set('qt:set',r);if(r.co.logo)LOGO=r.co.logo;if(r.th){TH=r.th;ls.set('qt:th',TH);applyTheme(TH)}if(!S.co.logo&&LOGO){S.co.logo=LOGO;logo()}}
+   if((r.ts||0)>((SET&&SET.ts)||0)){SET=r;ls.set('qt:set',r);if(r.co.logo)LOGO=r.co.logo;if(r.th){TH=r.th;ls.set('qt:th',TH);applyTheme(TH)}if(r.lh){LH=r.lh;ls.set('qt:lh',LH);applyLH()}if(!S.co.logo&&LOGO){S.co.logo=LOGO;logo()}}
   },()=>{});
   if(!run)setSync('ok');
  }catch(e){setSync('err')}
@@ -690,8 +633,22 @@ $('#cr').onclick=async()=>{
  const t=await themeFrom(src).catch(()=>null);
  if(t)setTheme(t);else alert('لم أجد ألوانًا واضحة في الشعار، اختر اللونين يدويًا');
 };
+/* ===== الطباعة على ورق الشركة ===== */
+function applyLH(){const a=$('#lht'),b=$('#lhb');if(a){a.value=LH.t;b.value=LH.b}}
+$('#lht').oninput=$('#lhb').oninput=()=>{LH={t:+$('#lht').value||0,b:+$('#lhb').value||0,s:LH.s||12};ls.set('qt:lh',LH);dirtyCo=true;queue()};
+function clearLH(){document.body.classList.remove('lh');const o=$('#lhp');if(o)o.remove()}
+$('#prt').onclick=()=>{clearLH();window.print()};
+$('#prl').onclick=()=>{
+ save();clearLH();
+ const st=document.createElement('style');st.id='lhp';
+ st.textContent='@page{size:A4;margin:'+LH.t+'mm '+(LH.s||12)+'mm '+LH.b+'mm '+(LH.s||12)+'mm}';
+ document.head.appendChild(st);document.body.classList.add('lh');
+ const done=()=>{clearLH();window.removeEventListener('afterprint',done)};
+ window.addEventListener('afterprint',done);
+ setTimeout(()=>window.print(),80);
+};
 {const s0=ls.get(K,null);load(s0||(()=>{const b=blank();if(SET)fromSet(b,SET);return b})())}
-cls();LOGO=S.co.logo||(SET&&SET.co&&SET.co.logo)||'';if(!TH&&SET&&SET.th)TH=SET.th;applyTheme(TH);
+cls();LOGO=S.co.logo||(SET&&SET.co&&SET.co.logo)||'';if(!TH&&SET&&SET.th)TH=SET.th;applyTheme(TH);if(!ls.get('qt:lh',null)&&SET&&SET.lh)LH=SET.lh;applyLH();
 if(window.claude&&claude.use)attach();else setSync('off');
 </script>
 </body>
