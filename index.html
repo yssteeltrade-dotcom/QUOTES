@@ -18,7 +18,7 @@ body{margin:0;background:var(--bg);font-family:Cairo,Tahoma,sans-serif;color:var
 button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:7px 14px;background:var(--brand);color:#fff;font-weight:600}
 button.g{background:var(--soft);color:var(--brand);border:1px solid var(--line)}
 .panel{display:none;flex-direction:column;align-items:stretch}
-.panel.on{display:flex}
+.panel.on{display:flex;position:fixed;inset:0;z-index:55;background:var(--bg);overflow:auto;padding:12px;margin:0;border-radius:0}
 .qi{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
 .qi:last-child{border:0}.qi b{flex:1}.qi span{color:var(--mut);font-size:12px}
 .paper{background:var(--paper);border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)}
@@ -268,7 +268,7 @@ window.FIREBASE_CONFIG={
    </div>
 
    <div class="wd" id="wd"></div>
-   <h4 class="s" id="th">الشروط والملاحظات</h4>
+   <h4 class="s"><span id="th">الشروط والملاحظات</span> <button class="g" id="tdef" style="font-size:11px;padding:2px 8px">⭐ حفظ كافتراضي للقادم</button></h4>
    <textarea class="terms" data-k="terms" rows="3"></textarea>
    </div>
    <div class="lo" id="loBox" style="display:none">
@@ -428,14 +428,14 @@ $('#file').onchange=e=>{
  r.readAsDataURL(f);
 };
 const mk=(t,sub)=>{
- save();const n=blank(t,sub),o=S;n.co=JSON.parse(JSON.stringify(o.co));n.st=JSON.parse(JSON.stringify(o.st));if(t===o.type)n.terms=o.terms;n.br=JSON.parse(JSON.stringify(o.br||n.br));if(SET)fromSet(n,SET);n.vat=o.vat;n.cur=o.cur;
+ save();const n=blank(t,sub),o=S;n.co=JSON.parse(JSON.stringify(o.co));n.st=JSON.parse(JSON.stringify(o.st));if(t===o.type)n.terms=o.terms;else if(SET&&SET.terms&&SET.terms[t])n.terms=SET.terms[t];n.br=JSON.parse(JSON.stringify(o.br||n.br));if(SET)fromSet(n,SET);n.vat=o.vat;n.cur=o.cur;
  load(n);ls.set(K,S);$('#panel').classList.remove('on');scrollTo(0,0);
 };
 function list(){
  const l=ls.get(L,[]),p=$('#panel');
  const dispName=q=>q.type==='l'?((q.lt&&q.lt.to)||'بدون اسم'):(q.cl.name||'بدون اسم عميل');
  const summary=q=>q.type==='l'?(q.sub==='cash'?(fmt((q.lt&&q.lt.amt)||0)+' '+esc(q.cur)):(LTYs[q.sub]||'خطاب')):(q.type==='d'||q.type==='r')?q.items.length+' بند':fmt(totals(q).t)+' '+esc(q.cur);
- p.innerHTML=tabs()+(l.length?l.map((q,i)=>(flt==='all'||(q.type||'q')===flt)&&(!pqv||((q.cl.name||'')+' '+q.no+' '+(q.cl.proj||'')+' '+((q.lt&&q.lt.to)||'')).toLowerCase().includes(pqv.toLowerCase()))?`<div class="qi"><span class="bd ${q.type||'q'}">${{q:'عرض',p:'فاتورة',d:'تسليم',r:'استلام',l:'خطاب'}[q.type||'q']}</span><b>${esc(dispName(q))} <span>· ${esc(q.no)}</span><em class="wh" data-wb="${esc(q.by||'')}" data-we="${esc(q.ed||'')}"></em></b><span>${summary(q)} · ${esc(q.date)}</span>
+ p.innerHTML='<div class="dbh"><b>عروضي وفواتيري</b><button class="g" id="pnx">إغلاق ✕</button></div>'+tabs()+(l.length?l.map((q,i)=>(flt==='all'||(q.type||'q')===flt)&&(!pqv||((q.cl.name||'')+' '+q.no+' '+(q.cl.proj||'')+' '+((q.lt&&q.lt.to)||'')).toLowerCase().includes(pqv.toLowerCase()))?`<div class="qi"><span class="bd ${q.type||'q'}">${{q:'عرض',p:'فاتورة',d:'تسليم',r:'استلام',l:'خطاب'}[q.type||'q']}</span><b>${esc(dispName(q))} <span>· ${esc(q.no)}</span><em class="wh" data-wb="${esc(q.by||'')}" data-we="${esc(q.ed||'')}"></em></b><span>${summary(q)} · ${esc(q.date)}</span>
  <button class="g" data-open="${i}">فتح</button><button class="g" data-rm="${i}">حذف</button></div>`:'').join(''):'<span style="color:var(--mut)">لا توجد عروض محفوظة بعد — أي عرض تكتب فيه يُحفظ هنا تلقائيًا.</span>');fillWho();
 }
 $('#new').onclick=()=>mk('q');$('#newp').onclick=()=>mk('p');$('#newd').onclick=()=>mk('d');$('#newr').onclick=()=>mk('r');
@@ -444,14 +444,15 @@ $('#ltc').onclick=()=>{$('#ltm').hidden=true};
 $('#ltm').addEventListener('click',e=>{const sb=e.target.dataset.sub;if(!sb)return;$('#ltm').hidden=true;mk('l',sb)});
 $('#cvd').onclick=()=>{save();const f=S.no,n=JSON.parse(JSON.stringify(S));
  n.id=Date.now().toString(36);delete n.by;delete n.ed;delete n.src;n.type='d';n.ref=f;n.no='DN-'+String(Date.now()).slice(-6);n.date=iso(new Date());
- n.items=S.items.map(i=>({d:i.d,q:i.q,u:i.u||'',n:''}));n.terms=blank('d').terms;n.x={drv:'',veh:'',rcv:''};
+ n.items=S.items.map(i=>({d:i.d,q:i.q,u:i.u||'',n:''}));n.terms=(SET&&SET.terms&&SET.terms.d)||blank('d').terms;n.x={drv:'',veh:'',rcv:''};
  load(n);save();scrollTo(0,0);$('#stat').textContent='تم إنشاء إذن تسليم من '+f+' ✓'};
 $('#cv').onclick=()=>{save();const n=JSON.parse(JSON.stringify(S)),v=new Date();v.setDate(v.getDate()+7);
- n.id=Date.now().toString(36);delete n.by;delete n.ed;n.type='p';n.src=S.no;n.no='PI-'+String(Date.now()).slice(-6);n.date=iso(new Date());n.valid=iso(v);n.terms=blank('p').terms;
+ n.id=Date.now().toString(36);delete n.by;delete n.ed;n.type='p';n.src=S.no;n.no='PI-'+String(Date.now()).slice(-6);n.date=iso(new Date());n.valid=iso(v);n.terms=(SET&&SET.terms&&SET.terms.p)||blank('p').terms;
  load(n);save();scrollTo(0,0);$('#stat').textContent='تم إنشاء فاتورة مبدئية من العرض '+n.src+' ✓'};
 $('#panel').addEventListener('input',e=>{if(e.target.id!=='pq')return;pqv=e.target.value;list();const q=$('#pq');q.focus();q.setSelectionRange(q.value.length,q.value.length)});
 $('#lst').onclick=()=>{list();$('#panel').classList.toggle('on')};
 $('#panel').addEventListener('click',e=>{
+ if(e.target.id==='pnx'){$('#panel').classList.remove('on');return}
  const l=ls.get(L,[]),o=e.target.dataset.open,r=e.target.dataset.rm,cd=e.target.dataset.cd;
  if(e.target.dataset.flt){flt=e.target.dataset.flt;list();return}
  if(cd!=null){const c=clients(),x=c.splice(+cd,1)[0];ls.set(CL,c);cls();if(x)cdel(x.name);list();return}
@@ -475,7 +476,7 @@ const cpush=c=>put('clients',cid(c.name),{name:c.name,phone:c.phone||'',email:c.
 const ipush=it=>put('items',it.id,{id:it.id,name:it.name,unit:it.unit||'',price:+it.price||0,note:it.note||'',ts:Date.now()});
 const idel=id=>put('items',id,null);
 const cdel=n=>put('clients',cid(n),null);
-const mkSet=()=>{const d=cl({co:S.co,st:S.st,br:S.br,vat:S.vat,cur:S.cur});d.co.logo=LOGO||'';d.th=TH||null;d.lh=LH;d.ts=Date.now();return d};
+const mkSet=()=>{const d=cl({co:S.co,st:S.st,br:S.br,vat:S.vat,cur:S.cur});d.co.logo=LOGO||'';d.th=TH||null;d.lh=LH;d.terms=(SET&&SET.terms)||{};d.ts=Date.now();return d};
 const spush=()=>{SET=mkSet();ls.set('qt:set',SET);put('settings','main',SET)};
 const fromSet=(q,t)=>{q.co=cl(t.co);q.st=cl(t.st);q.br=cl(t.br);q.vat=t.vat;q.cur=t.cur;if(!q.co.logo&&LOGO)q.co.logo=LOGO};
 const nm=(ps,id)=>ps[id]?(ps[id].isMe?'أنت':(ps[id].name||'زميل')):'زميل';
@@ -539,7 +540,7 @@ async function attach(){
   if(rs&&(!SET||(rs.ts||0)>=(SET.ts||0))){SET=rs;ls.set('qt:set',rs);if(rs.co.logo)LOGO=rs.co.logo;if(rs.th){TH=rs.th;ls.set('qt:th',TH);applyTheme(TH)}if(rs.lh){LH=rs.lh;ls.set('qt:lh',LH);applyLH()}}
   else if(SET||S.co.name||LOGO){if(!SET)SET=mkSet();ls.set('qt:set',SET);put('settings','main',SET)}
   if(!LOGO&&SET&&SET.co.logo)LOGO=SET.co.logo;
-  if(SET&&!filled(S)&&!editing()){fromSet(S,SET);load(S);ls.set(K,S)}
+  if(SET&&!filled(S)&&!editing()){fromSet(S,SET);if(SET.terms&&SET.terms[S.type])S.terms=SET.terms[S.type];load(S);ls.set(K,S)}
   const mine=map.get(S.id);if(mine&&(mine.ts||0)>(S.ts||0)&&!editing()){load(mine);ls.set(K,S)}
   if(!S.co.logo&&LOGO){S.co.logo=LOGO;logo()}
   if(panelOn())list();who();
@@ -689,6 +690,11 @@ async function sendWA(){
   waDialog(blob,name);
  }finally{b.disabled=false;b.textContent=t}
 }
+$('#tdef').onclick=()=>{
+ const st=(SET&&SET.terms)?{...SET.terms}:{};st[S.type]=S.terms;
+ SET=mkSet();SET.terms=st;ls.set('qt:set',SET);put('settings','main',SET);
+ $('#stat').textContent='تم حفظ الشروط كافتراضي للمستندات القادمة من هذا النوع ✓';
+};
 $('#wa').onclick=()=>{save();sendWA()};
 $('#wac').onclick=()=>{$('#wam').hidden=true};
 /* ===== نسخة احتياطية / استيراد ===== */
@@ -758,7 +764,7 @@ $('#prl').onclick=()=>{
  window.addEventListener('afterprint',done);
  setTimeout(()=>window.print(),80);
 };
-{const s0=ls.get(K,null);load(s0||(()=>{const b=blank();if(SET)fromSet(b,SET);return b})())}
+{const s0=ls.get(K,null);load(s0||(()=>{const b=blank();if(SET){fromSet(b,SET);if(SET.terms&&SET.terms.q)b.terms=SET.terms.q}return b})())}
 cls();LOGO=S.co.logo||(SET&&SET.co&&SET.co.logo)||'';if(!TH&&SET&&SET.th)TH=SET.th;applyTheme(TH);if(!ls.get('qt:lh',null)&&SET&&SET.lh)LH=SET.lh;applyLH();
 if(window.claude&&claude.use)attach();else setSync('off');
 </script>
