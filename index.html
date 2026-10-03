@@ -645,7 +645,7 @@ const loadJS=u=>new Promise((res,rej)=>{const t=document.createElement('script')
 async function makePdf(){
  await Promise.all([window.html2canvas||loadJS(H2C),window.jspdf||loadJS(JSP)]);
  if(document.fonts&&document.fonts.ready)await document.fonts.ready;
- const cv=await html2canvas($('.paper'),{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false,windowWidth:900,onclone:d=>{d.body.classList.add('cap');d.documentElement.setAttribute('style',document.documentElement.getAttribute('style')||'')}});
+ const cv=await html2canvas($('.paper'),{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false,windowWidth:900,foreignObjectRendering:true,onclone:d=>{d.body.classList.add('cap');d.documentElement.setAttribute('style',document.documentElement.getAttribute('style')||'')}});
  const pdf=new window.jspdf.jsPDF({unit:'pt',format:'a4',compress:true}),pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
  const sh=Math.floor(cv.width*ph/pw);let y=0,first=true;
  while(y<cv.height){
