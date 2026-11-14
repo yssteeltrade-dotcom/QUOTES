@@ -158,6 +158,31 @@ body.cap{font-size:16px}
 #thm input[type=number]{width:58px;border:1px solid var(--line);border-radius:6px;padding:3px 4px;text-align:center}
 .lo,.nlo{}
 
+
+.hdt{display:none}
+/* ---- عصري: بدون بيانات العرض، التاريخ تحت العنوان، الجدول بدون عمود #، بيانات الشركة آخر الصفحة ---- */
+.paper[data-lay="modern"] .hdt{display:flex;gap:4px;align-items:center;justify-content:center;font-size:12px;margin:2px 0}
+.paper[data-lay="modern"] .hdt input{width:128px;text-align:center;font-size:13px}
+.paper[data-lay="modern"] .ofb .dtl,.paper[data-lay="modern"] .ofb .qo,.paper[data-lay="modern"] .ofb h4{display:none!important}
+.paper[data-lay="modern"] .ofb:not(:has(.dro:not([style*="none"]))){display:none}
+.paper[data-lay="modern"] .meta{display:flex;flex-direction:column;gap:10px}
+.paper[data-lay="modern"] .meta>div:first-child{background:var(--soft);border-radius:10px;padding:12px 14px}
+.paper[data-lay="modern"] .cob{order:9;border-top:1px dashed var(--mut);padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 18px}
+.paper[data-lay="modern"] .meta .cob h4{display:none!important}
+.paper[data-lay="modern"] table th:first-child,.paper[data-lay="modern"] table td:first-child{display:none}
+.paper[data-lay="modern"] .tot{margin-inline-start:0;margin-inline-end:auto}
+/* ---- أنيق: شريط بيانات الشركة تحت العنوان، العميل والعرض في إطار، التاريخ جنب العنوان، الإجمالي في النص ---- */
+.paper[data-lay="elegant"] .meta{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--brand);margin-bottom:18px}
+.paper[data-lay="elegant"] .meta>div{flex:1 1 220px;padding:10px 14px;border-inline-end:1px solid var(--brand)}
+.paper[data-lay="elegant"] .meta>div:last-child{border-inline-end:0}
+.paper[data-lay="elegant"] .cob{order:-1;flex:1 1 100%!important;border-inline-end:0!important;border-bottom:1px solid var(--brand);background:var(--soft);display:flex;flex-wrap:wrap;justify-content:center;gap:2px 22px;text-align:center}
+.paper[data-lay="elegant"] .meta .cob h4{display:none!important}
+.paper[data-lay="elegant"] .cob label{flex:0 1 auto}
+.paper[data-lay="elegant"] .meta h4{text-align:center;display:block;border-bottom:1px solid var(--brand);margin-bottom:8px}
+.paper[data-lay="elegant"] .tot{margin:14px auto 0;width:min(420px,100%);border:1px solid var(--brand);padding:6px}
+.paper[data-lay="elegant"] .tot div{border-bottom:1px dotted var(--mut)}
+.paper[data-lay="elegant"] table td{border-bottom:1px solid var(--line)}
+.paper[data-lay="elegant"] table td:first-child,.paper[data-lay="elegant"] table th:first-child{text-align:center;color:var(--brand);font-weight:700}
 /* ===== تصاميم المستند (لكل شركة تصميمها) ===== */
 #layr button{padding:3px 12px;font-size:12px}#layr button.on{background:var(--brand);color:#fff}
 .paper[data-lay="modern"]{border-radius:6px;border-top:8px solid var(--brand)}
@@ -309,6 +334,7 @@ window.FIREBASE_CONFIG={
    </div>
    <div class="qt"><h2 id="ttl">عرض سعر</h2>
     <label>رقم: <input data-k="no" style="width:110px;display:inline-block;text-align:end"></label>
+    <label class="hdt">التاريخ: <input type="date" data-k="date"></label>
     <label id="srcw" style="display:none">عن عرض: <input data-k="src" style="width:110px;display:inline-block;text-align:end"></label>
    </div>
   </div>
@@ -319,12 +345,12 @@ window.FIREBASE_CONFIG={
      <label><span id="pn">السادة:</span> <input data-k="cl.name" list="cls" autocomplete="off" placeholder="اسم العميل / الشركة"><datalist id="cls"></datalist></label>
      <label>الهاتف: <input data-k="cl.phone" placeholder="رقم التواصل"></label>
      <label><span id="pp">المشروع:</span> <input data-k="cl.proj" placeholder="وصف المشروع"></label></div>
-    <div><h4 id="mt">بيانات العرض</h4>
-     <label>التاريخ: <input type="date" data-k="date"></label>
+    <div class="ofb"><h4 id="mt">بيانات العرض</h4>
+     <label class="dtl">التاريخ: <input type="date" data-k="date"></label>
      <label class="dro" style="display:none">المرجع: <input data-k="ref" placeholder="رقم عرض / أمر شراء"></label>
      <label class="qo"><span id="lv">صالح حتى:</span> <input type="date" data-k="valid"></label>
      <label class="qo">العملة: <select data-k="cur"><option>ج.م</option><option>ر.س</option><option>د.إ</option><option>$</option><option>€</option></select></label></div>
-    <div class="cob"><h4>بيانات الشركة</h4>
+    <div class="cob"><h4 class="cobh">بيانات الشركة</h4>
      <label>هاتف: <input data-k="co.phone" placeholder="+20 ..."></label>
      <label>بريد: <input data-k="co.email" placeholder="info@company.com"></label>
      <label>العنوان: <input data-k="co.addr" placeholder="المدينة، الدولة"></label></div>
@@ -537,6 +563,7 @@ function save(){
 const queue=()=>{$('#stat').textContent='جارٍ الحفظ…';clearTimeout(timer);timer=setTimeout(save,400)};
 document.addEventListener('input',e=>{
  const t=e.target;
+ if(t.dataset.k==='date')$$('[data-k="date"]').forEach(o=>{if(o!==t)o.value=t.value});
  if(t.dataset.k){if(/^(co|st)\./.test(t.dataset.k)||t.dataset.k==='vat')dirtyCo=true;sp(S,t.dataset.k,t.dataset.n!==undefined?(+t.value||0):t.value);if(t.tagName==='TEXTAREA')grow(t);calc();queue()}
  else if(t.dataset.bf){dirtyCo=true;S.br[t.dataset.b][t.dataset.bf]=t.value;calc();queue()}
  else if(t.dataset.f){const it=S.items[t.dataset.i];it[t.dataset.f]=['d','u','n'].includes(t.dataset.f)?t.value:(+t.value||0);if(t.tagName==='TEXTAREA')grow(t);calc();queue()}
