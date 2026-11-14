@@ -157,6 +157,50 @@ body.cap{font-size:16px}
 @media print{tr,.tot,.wd,.ft,.br{break-inside:avoid}thead{display:table-header-group}h4.s{break-after:avoid}}
 #thm input[type=number]{width:58px;border:1px solid var(--line);border-radius:6px;padding:3px 4px;text-align:center}
 .lo,.nlo{}
+
+/* ===== تصاميم المستند (لكل شركة تصميمها) ===== */
+#layr button{padding:3px 12px;font-size:12px}#layr button.on{background:var(--brand);color:#fff}
+.paper[data-lay="modern"]{border-radius:6px;border-top:8px solid var(--brand)}
+.paper[data-lay="modern"] .hd{background:#fff;color:var(--ink);border-bottom:2px solid var(--line);padding:20px 22px}
+.paper[data-lay="modern"] .hd input{color:var(--brand)}.paper[data-lay="modern"] .hd input::placeholder{color:var(--mut)}
+.paper[data-lay="modern"] .logo{background:var(--soft);border:1px solid var(--line);color:var(--mut)}
+.paper[data-lay="modern"] .hd .co input:first-child{color:var(--brand)}
+.paper[data-lay="modern"] .hd .co input+input{color:var(--mut)}
+.paper[data-lay="modern"] .hd .qt{background:var(--brand);color:#fff;padding:10px 16px;border-radius:10px;text-align:center}
+.paper[data-lay="modern"] .hd .qt h2{color:#fff}.paper[data-lay="modern"] .hd .qt input,.paper[data-lay="modern"] .hd .qt label{color:#fff}
+.paper[data-lay="modern"] .st3{background:#fff}
+.paper[data-lay="modern"] .meta h4{border-bottom:0;border-inline-start:4px solid var(--acc);padding-inline-start:8px;display:block}
+.paper[data-lay="modern"] th{background:transparent;color:var(--brand);border-bottom:2px solid var(--brand)}
+.paper[data-lay="modern"] tr:nth-child(even) td{background:transparent}
+.paper[data-lay="modern"] td{border-bottom:1px dotted var(--mut)}
+.paper[data-lay="modern"] .tot .gt{background:transparent;color:var(--brand);border:2px solid var(--brand)}
+.paper[data-lay="modern"] .wd{border-radius:0;background:transparent;border:1px solid var(--line);border-inline-start:4px solid var(--acc)}
+.paper[data-lay="modern"] .ty{background:transparent;color:var(--mut);border-top:1px solid var(--line)}
+.paper[data-lay="elegant"]{border:3px double var(--brand);border-radius:0;box-shadow:none}
+.paper[data-lay="elegant"] .hd{background:var(--soft);color:var(--ink);flex-direction:column;text-align:center;border-bottom:3px double var(--brand);gap:8px}
+.paper[data-lay="elegant"] .hd .co{width:100%;flex:none;text-align:center}
+.paper[data-lay="elegant"] .hd input{color:var(--brand);text-align:center}.paper[data-lay="elegant"] .hd input::placeholder{color:var(--mut)}
+.paper[data-lay="elegant"] .logo{background:#fff;border:1px solid var(--line);color:var(--mut);width:96px;height:96px;border-radius:50%}
+.paper[data-lay="elegant"] .logo img{border-radius:50%}
+.paper[data-lay="elegant"] .hd .qt{text-align:center;width:100%;border-top:1px solid var(--brand);border-bottom:1px solid var(--brand);padding:6px 0}
+.paper[data-lay="elegant"] .hd .qt h2{color:var(--brand);font-size:24px;letter-spacing:6px}
+.paper[data-lay="elegant"] .hd .qt label{color:var(--mut)}
+.paper[data-lay="elegant"] .meta h4{color:var(--brand);border-bottom:1px solid var(--brand)}
+.paper[data-lay="elegant"] th{background:transparent;color:var(--brand);border-top:2px solid var(--brand);border-bottom:2px solid var(--brand);text-align:center}
+.paper[data-lay="elegant"] tr:nth-child(even) td{background:transparent}
+.paper[data-lay="elegant"] .tot .gt{background:var(--brand);border-radius:0}
+.paper[data-lay="elegant"] .wd{border-radius:0}
+.paper[data-lay="elegant"] .ty{background:transparent;color:var(--brand);border-top:3px double var(--brand);font-style:italic}
+@media print{body.lh .paper[data-lay] .hd{background:none!important;border:0!important;color:var(--ink)!important;padding:0 0 10px!important;justify-content:center!important}
+ body.lh .paper[data-lay] .hd .qt{background:none!important;color:var(--ink)!important;border:0!important;padding:0!important;width:100%;text-align:center}
+ body.lh .paper[data-lay] .hd .qt h2{color:var(--brand)!important;letter-spacing:0!important}
+ body.lh .paper[data-lay] .hd input,body.lh .paper[data-lay] .hd label{color:var(--ink)!important}
+ body.lh .paper[data-lay]{border:0!important;border-top:0!important}}
+body.cap.lh .paper[data-lay] .hd{background:none!important;border:0!important;color:var(--ink)!important;padding:0 0 10px!important;justify-content:center!important}
+body.cap.lh .paper[data-lay] .hd .qt{background:none!important;color:var(--ink)!important;border:0!important;padding:0!important;width:100%;text-align:center}
+body.cap.lh .paper[data-lay] .hd .qt h2{color:var(--brand)!important;letter-spacing:0!important}
+body.cap.lh .paper[data-lay] .hd input,body.cap.lh .paper[data-lay] .hd label{color:var(--ink)!important}
+body.cap.lh .paper[data-lay]{border:0!important}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -253,6 +297,7 @@ window.FIREBASE_CONFIG={
  <div class="panel" id="panel"></div>
 
  <div class="who" id="thm">🎨 ألوان الهوية: <input type="color" id="c1" title="اللون الأساسي"><input type="color" id="c2" title="اللون المميز"> <button class="g" id="cr">من الشعار</button><button class="g" id="cd">الافتراضي</button> <span style="margin-inline-start:12px">📄 ورق الشركة — هامش (مم): أعلى</span><input type="number" id="lht" min="0" max="120"><span>أسفل</span><input type="number" id="lhb" min="0" max="120"></div>
+ <div class="who" id="layr">🖼 تصميم المستند: <button class="g" data-lay="classic">كلاسيك</button><button class="g" data-lay="modern">عصري</button><button class="g" data-lay="elegant">أنيق</button></div>
  <div class="who" id="who"></div>
  <div class="paper">
   <div class="hd">
@@ -550,7 +595,10 @@ $('#panel').addEventListener('click',e=>{
  if(r!=null&&confirm('حذف هذا العرض نهائيًا؟')){const q=l.splice(+r,1)[0];ls.set(L,l);qdel(q.id);if(q.id===S.id){ls.set(K,S)}list()}
 });
 /* ===== مزامنة الفريق (db مشترك) + نسخة محلية ===== */
-let ME=null,USR=null,TH=ls.get('qt:th',null),LH=ls.get('qt:lh',null)||{t:42,b:34,s:12},LOGO='',DB=false,dbh=null,dirtyCo=false,SET=ls.get('qt:set',null);
+let ME=null,USR=null,TH=ls.get('qt:th',null),LH=ls.get('qt:lh',null)||{t:42,b:34,s:12},LOGO='',DB=false,dbh=null,dirtyCo=false,SET=ls.get('qt:set',null),LAY=ls.get('qt:lay',null);
+const LAYS=['classic','modern','elegant'];
+function applyLay(){const p=$('.paper');if(p)p.dataset.lay=LAY||'classic';$$('#layr button').forEach(b=>b.classList.toggle('on',b.dataset.lay===(LAY||'classic')))}
+function setLay(l){LAY=l;ls.set('qt:lay',l);applyLay();dirtyCo=true;queue()}
 const cl=o=>JSON.parse(JSON.stringify(o));
 const UP=new Set(ls.get('qt:up',[]));
 const setSync=t=>{const e=$('#sy');if(e)e.textContent={ok:'☁ متزامن مع الفريق',busy:'☁ جارٍ المزامنة…',off:'محفوظ على هذا الجهاز فقط',err:'⚠ تعذّرت المزامنة — سنعيد المحاولة'}[t]||''};
@@ -566,7 +614,7 @@ const cpush=c=>put('clients',cid(c.name),{name:c.name,phone:c.phone||'',email:c.
 const ipush=it=>put('items',it.id,{id:it.id,name:it.name,unit:it.unit||'',price:+it.price||0,note:it.note||'',ts:Date.now()});
 const idel=id=>put('items',id,null);
 const cdel=n=>put('clients',cid(n),null);
-const mkSet=()=>{const d=cl({co:S.co,st:S.st,br:S.br,vat:S.vat,cur:S.cur});d.co.logo=LOGO||'';d.th=TH||null;d.lh=LH;d.terms=(SET&&SET.terms)||{};d.ts=Date.now();return d};
+const mkSet=()=>{const d=cl({co:S.co,st:S.st,br:S.br,vat:S.vat,cur:S.cur});d.co.logo=LOGO||'';d.th=TH||null;d.lh=LH;d.lay=LAY||null;d.terms=(SET&&SET.terms)||{};d.ts=Date.now();return d};
 const spush=()=>{SET=mkSet();ls.set('qt:set',SET);put('settings','main',SET)};
 const fromSet=(q,t)=>{q.co=cl(t.co);q.st=cl(t.st);q.br=cl(t.br);q.vat=t.vat;q.cur=t.cur;if(!q.co.logo&&LOGO)q.co.logo=LOGO};
 const nm=(ps,id)=>ps[id]?(ps[id].isMe?'أنت':(ps[id].name||'زميل')):'زميل';
@@ -628,7 +676,7 @@ async function attach(){
   /* بيانات الشركة المشتركة */
   if(oldMeta&&oldMeta.logo&&!LOGO)LOGO=oldMeta.logo;
   const rs=ss.exists?cl(ss.data()):null;
-  if(rs&&(!SET||(rs.ts||0)>=(SET.ts||0))){SET=rs;ls.set('qt:set',rs);if(rs.co.logo)LOGO=rs.co.logo;if(rs.th){TH=rs.th;ls.set('qt:th',TH);applyTheme(TH)}if(rs.lh){LH=rs.lh;ls.set('qt:lh',LH);applyLH()}}
+  if(rs&&(!SET||(rs.ts||0)>=(SET.ts||0))){SET=rs;ls.set('qt:set',rs);if(rs.co.logo)LOGO=rs.co.logo;if(rs.th){TH=rs.th;ls.set('qt:th',TH);applyTheme(TH)}if(rs.lh){LH=rs.lh;ls.set('qt:lh',LH);applyLH()}if(rs.lay){LAY=rs.lay;ls.set('qt:lay',LAY);applyLay()}}
   else if(SET||S.co.name||LOGO){if(!SET)SET=mkSet();ls.set('qt:set',SET);put('settings','main',SET)}
   if(!LOGO&&SET&&SET.co.logo)LOGO=SET.co.logo;
   if(SET&&!filled(S)&&!editing()){fromSet(S,SET);if(SET.terms&&SET.terms[S.type])S.terms=SET.terms[S.type];load(S);ls.set(K,S)}
@@ -663,7 +711,7 @@ async function attach(){
   db.doc('settings/companies').onSnapshot(sn=>{if(sn.metadata.hasPendingWrites||!sn.exists)return;if(mergeComp(cl(sn.data()))&&!$('#home').hidden)hmShow()},()=>{});
   db.doc(fp('settings/main')).onSnapshot(sn=>{
    if(sn.metadata.hasPendingWrites||!sn.exists)return;const r=cl(sn.data());
-   if((r.ts||0)>((SET&&SET.ts)||0)){SET=r;ls.set('qt:set',r);if(r.co.logo)LOGO=r.co.logo;if(r.th){TH=r.th;ls.set('qt:th',TH);applyTheme(TH)}if(r.lh){LH=r.lh;ls.set('qt:lh',LH);applyLH()}if(!S.co.logo&&LOGO){S.co.logo=LOGO;logo()}}
+   if((r.ts||0)>((SET&&SET.ts)||0)){SET=r;ls.set('qt:set',r);if(r.co.logo)LOGO=r.co.logo;if(r.th){TH=r.th;ls.set('qt:th',TH);applyTheme(TH)}if(r.lh){LH=r.lh;ls.set('qt:lh',LH);applyLH()}if(r.lay){LAY=r.lay;ls.set('qt:lay',LAY);applyLay()}if(!S.co.logo&&LOGO){S.co.logo=LOGO;logo()}}
   },()=>{});
   if(!run)setSync('ok');
  }catch(e){setSync('err')}
@@ -796,6 +844,7 @@ $('#cr').onclick=async()=>{
 };
 /* ===== الطباعة على ورق الشركة ===== */
 function applyLH(){const a=$('#lht'),b=$('#lhb');if(a){a.value=LH.t;b.value=LH.b}}
+$('#layr').onclick=e=>{const l=e.target.dataset.lay;if(l)setLay(l)};
 $('#lht').oninput=$('#lhb').oninput=()=>{LH={t:+$('#lht').value||0,b:+$('#lhb').value||0,s:LH.s||12};ls.set('qt:lh',LH);dirtyCo=true;queue()};
 function clearLH(){document.body.classList.remove('lh');const o=$('#lhp');if(o)o.remove()}
 $('#prt').onclick=()=>{clearLH();window.print()};
@@ -937,8 +986,8 @@ $('#hmCl').onclick=e=>{
 };
 $('#hmAddCo').onclick=()=>{
  const n=(prompt('اسم الشركة الجديدة:')||'').trim();if(!n)return;
- const id='c'+Date.now().toString(36),b=blank();
- const set={co:{...b.co,name:n},st:b.st,br:b.br,vat:b.vat,cur:b.cur,th:null,lh:{t:42,b:34,s:12},terms:{},ts:Date.now()};
+ const id='c'+Date.now().toString(36),b=blank(),lay=LAYS[COMP.length%3];
+ const set={co:{...b.co,name:n},st:b.st,br:b.br,vat:b.vat,cur:b.cur,th:null,lh:{t:42,b:34,s:12},lay,terms:{},ts:Date.now()};
  try{localStorage.setItem('qt:'+id+':set',JSON.stringify(set))}catch(e){}
  COMP.push({id,name:n});saveComp(true);pickCo(id);
 };
@@ -964,6 +1013,7 @@ $('#hmLst').onclick=()=>{hmHide();list();$('#panel').classList.add('on')};
 $('#hmCont').onclick=()=>{hmHide()};
 {const s0=ls.get(K,null);load(s0||(()=>{const b=blank();if(SET){fromSet(b,SET);if(SET.terms&&SET.terms.q)b.terms=SET.terms.q}return b})())}
 cls();LOGO=S.co.logo||(SET&&SET.co&&SET.co.logo)||'';if(!TH&&SET&&SET.th)TH=SET.th;applyTheme(TH);if(!ls.get('qt:lh',null)&&SET&&SET.lh)LH=SET.lh;applyLH();
+if(!LAY&&SET&&SET.lay)LAY=SET.lay;if(!LAY)LAY=LAYS[Math.max(0,COMP.findIndex(c=>c.id===CID))%3];applyLay();
 if(window.claude&&claude.use)attach();else setSync('off');
 hmShow();
 </script>
